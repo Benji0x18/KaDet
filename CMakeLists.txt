@@ -1,6 +1,6 @@
 cmake_minimum_required(3.10)
 
-project(KaDet)
+project(KaDet VERSION 0.1.0 PROJECT_DESCRIPTION "Shock and Detonation library for C++")
 
 set(CMAKE_CXX_STANDARD 17)
 set(source_dir "${PROJECT_SOURCE_DIR}/src/")
