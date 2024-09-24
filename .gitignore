@@ -37,25 +37,11 @@ ehthumbs.db
 Thumbs.db
 
 # VSCode Stuff #
+################
 
-*.json
+.vscode
 
 # CMake Stuff#
 ##############
-*.make
-*.cmake
-*.txt
-*.ts
-*.c
-*.bin
-*.out
-*.internal
-*.marks
-*.check_cache
-*.d
-Makefile
-Makefile2
-1
-2
-4
-CMakeCXXCompilerId
+
+build
