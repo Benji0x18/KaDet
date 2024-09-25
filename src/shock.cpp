@@ -4,8 +4,7 @@ namespace KaDet
 {
     namespace shock
     {
-
-        void FHFP(const double& vel, std::shared_ptr<Ct::Solution> gas2, std::shared_ptr<Ct::Solution> gas1, double &FH, double &FP )
+        void FHFP(const double& U, std::shared_ptr<Ct::Solution> gas2, std::shared_ptr<Ct::Solution> gas1, double &FH, double &FP )
         {
             double D = gas2->thermo()->density();
             double H = gas2->thermo()->enthalpy_mass();
@@ -15,7 +14,7 @@ namespace KaDet
             double H1 = gas1->thermo()->enthalpy_mass();
             double P1 = gas1->thermo()->pressure();
 
-            double w1 = vel *  vel;
+            double w1 = U *  U;
             double w2 = w1 * (D1/D) * (D1/D);
 
             FH = H + 0.5 * w2 - (H1 + 0.5*w1);
@@ -23,7 +22,7 @@ namespace KaDet
         }
 
 
-        int eqCalc(const double &vel, std::shared_ptr<Ct::Solution> gas1, std::shared_ptr<Cantera::Solution> gas2, double errT, double errV)
+        int eqCalc(const double &U, std::shared_ptr<Ct::Solution> gas1, std::shared_ptr<Cantera::Solution> gas2, double errT, double errV)
         {
             // This is the function is the equivalent of shk_eq_calc.m from Shock Detonation Toolbox. https://shepherd.caltech.edu/EDL/PublicResources/sdt/ (retrieved 24.01.2024)
             
@@ -39,7 +38,7 @@ namespace KaDet
 
             double V = V1/volumeBoundRatio;
             double R = 1/V;
-            double P = P1 + R1*(vel*vel)*(1-R1/R);
+            double P = P1 + R1*(U*U)*(1-R1/R);
             double T = T1*P*R1/(P1*R);
             gas2->thermo()->setState_TD(T, R);
             gas2->thermo()->equilibrate("TV");
@@ -50,13 +49,13 @@ namespace KaDet
                 j++;
                 if(j==500)
                 {
-                    std::cout << "Shock Equilibrium Calculation did not converge for U = " << vel << '\n';
+                    std::cout << "Shock Equilibrium Calculation did not converge for U = " << U << '\n';
                     break;
                     return 1;
                 }
                 // Calculate FH and FP for guess 1;
                 double FH, FP;
-                FHFP(vel, gas2, gas1, FH, FP);
+                FHFP(U, gas2, gas1, FH, FP);
 
                 // Calculate perturbations
 
@@ -70,7 +69,7 @@ namespace KaDet
                 gas2->thermo()->setState_TD(Tper, Rper);
                 gas2->thermo()->equilibrate("TV");
 
-                FHFP(vel, gas2, gas1, FHX, FPX);
+                FHFP(U, gas2, gas1, FHX, FPX);
 
                 DFHDT = (FHX - FH)/DT;
                 DFPDT = (FPX - FP)/DT;
@@ -84,7 +83,7 @@ namespace KaDet
                 gas2->thermo()->setState_TD(Tper, Rper);
                 gas2->thermo()->equilibrate("TV");
 
-                FHFP(vel, gas2, gas1, FHX, FPX);
+                FHFP(U, gas2, gas1, FHX, FPX);
 
                 DFHDV = (FHX - FH)/DV;
                 DFPDV = (FPX - FP)/DV;
@@ -136,4 +135,5 @@ namespace KaDet
             return 0;
         }
     }
+    
 }
