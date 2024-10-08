@@ -1,12 +1,15 @@
 #include <iostream>
 #include "Kadet.hpp"
 
+namespace Kd = Kadet;
+namespace Ct = Cantera;
+
 int main()
 {
-    std::shared_ptr<Cantera::Solution> gas1 = Cantera::newSolution("airNASA9.yaml");
-    std::shared_ptr<Cantera::Solution> gas2 = Cantera::newSolution("airNASA9.yaml");
+    std::shared_ptr<Ct::Solution> gas1 = Ct::newSolution("airNASA9.yaml");
+    std::shared_ptr<Ct::Solution> gas2 = Ct::newSolution("airNASA9.yaml");
     
-    KaDet::shock::eq_calc(gas1,gas2,1e-3,1e-3);
+    Kd::shock::calcEq(2000,gas1,gas2,1e-3,1e-3);
 
     return 0;
 }

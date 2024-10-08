@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(KaDet)
+project(Kadet)
 
 set(CMAKE_CXX_STANDARD 17)
 set(source_dir "${PROJECT_SOURCE_DIR}/src/")
@@ -10,7 +10,7 @@ find_package(Threads REQUIRED)
 include_directories("/usr/include" "/usr/local/include")
 link_directories("/usr/lib/cantera" "usr/local/lib")
 
-add_library(kadet SHARED ${source_dir}/KaDet.cpp)
+add_library(kadet SHARED ${source_dir}/Kadet.cpp)
 target_include_directories(kadet PRIVATE ${include_dir})
 target_link_libraries(kadet cantera)
 
