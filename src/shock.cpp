@@ -4,6 +4,44 @@ namespace Kadet
 {
     namespace shock
     {
+
+        std::array<double,6> LSQ_speedCJ(const std::vector<double> &x, const std::vector<double> &y)
+        {
+            std::array<double, 6> res;
+            return res;
+        }
+
+        double frHug(const double &Ta, const double &Vb, const double &H1, const double &P1, const double &V1, std::shared_ptr<Cantera::Solution> gas)
+        {
+            gas->thermo()->setState_TD(Ta,1/Vb);
+
+            double Hb1 = gas->thermo()->enthalpy_mass();
+            double Pb = Cantera::GasConstant * Ta / (gas->thermo()->meanMolecularWeight()*Vb);
+
+            double Hb2 = H1 + 0.5*(Pb-P1)*(Vb + V1);
+
+            return Hb2-Hb1;
+        }
+
+        double eqHug(const double &Ta, const double &Vb, const double &H1, const double &P1, const double &V1, std::shared_ptr<Cantera::Solution> gas)
+        {
+            gas->thermo()->setState_TD(Ta,1/Vb);
+
+            gas->thermo()->equilibrate("TV");
+
+            double Hb1 = gas->thermo()->enthalpy_mass();
+            double Pb = Cantera::GasConstant * Ta / (gas->thermo()->meanMolecularWeight()*Vb);
+
+            double Hb2 = H1 + 0.5*(Pb-P1)*(Vb + V1);
+
+            return Hb2-Hb1;
+        }
+
+        double calcCJ(std::shared_ptr<Cantera::Solution> gas1, std::shared_ptr<Cantera::Solution> gas2, const double &errV, const double &errT, const double &x)
+        {
+            return 0;
+        }
+
         void FHFP(const double& U, std::shared_ptr<Cantera::Solution> gas2, std::shared_ptr<Cantera::Solution> gas1, double &FH, double &FP )
         {
             double D = gas2->thermo()->density();
