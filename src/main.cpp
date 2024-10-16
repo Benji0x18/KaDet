@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Kadet.hpp"
 
-namespace Kd = Kadet;
 namespace Ct = Cantera;
+namespace Kd = Kadet;
 
 int main()
 {
